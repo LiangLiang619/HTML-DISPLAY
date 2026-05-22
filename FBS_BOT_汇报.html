@@ -1,0 +1,1113 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FBS Sweet Helper</title>
+  <style>
+    :root {
+      --orange: #ee4d2d;
+      --orange-2: #ff7a45;
+      --orange-3: #fff4ee;
+      --ink: #17202a;
+      --muted: #667085;
+      --line: #e7e9ee;
+      --bg: #f6f7f9;
+      --paper: #ffffff;
+      --green: #079455;
+      --red: #d92d20;
+      --blue: #175cd3;
+      --shadow: 0 24px 68px rgba(23, 32, 42, .12);
+      --orange-shadow: 0 20px 54px rgba(238, 77, 45, .18);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Inter", "Segoe UI", "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+      background:
+        radial-gradient(circle at 8% 4%, rgba(238, 77, 45, .16), transparent 30rem),
+        linear-gradient(180deg, #fff 0%, #f7f8fa 45%, #fff 100%);
+    }
+
+    h1, h2, h3, h4, p, li, span, strong, small, td, th { outline-color: rgba(238, 77, 45, .35); }
+    h1, h2, h3, h4, p { margin: 0; }
+    h1, h2, h3 { letter-spacing: 0; line-height: 1.08; }
+    h1 { font-size: 70px; font-weight: 950; }
+    h2 { font-size: 48px; font-weight: 930; }
+    h3 { font-size: 24px; font-weight: 900; }
+    p { color: var(--muted); font-size: 18px; line-height: 1.52; }
+    a { color: inherit; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 12px 24px;
+      border-bottom: 1px solid rgba(238, 77, 45, .15);
+      background: rgba(255, 255, 255, .90);
+      backdrop-filter: blur(16px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 900;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      color: #fff;
+      background: var(--orange);
+      box-shadow: var(--orange-shadow);
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .nav a, .print-btn, .mini-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      padding: 8px 12px;
+      border: 1px solid #ffd0c1;
+      border-radius: 999px;
+      color: #8c2b19;
+      background: #fff7f2;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 850;
+      cursor: pointer;
+    }
+
+    .nav a:hover, .print-btn:hover, .mini-btn:hover {
+      color: #fff;
+      background: var(--orange);
+      border-color: var(--orange);
+    }
+
+    main {
+      max-width: 1680px;
+      margin: 0 auto;
+      padding: 22px 24px 64px;
+    }
+
+    .page {
+      position: relative;
+      min-height: 900px;
+      margin: 0 auto 28px;
+      padding: 56px 64px;
+      overflow: hidden;
+      border: 1px solid rgba(238, 77, 45, .14);
+      border-radius: 26px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .page::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 8px;
+      background: linear-gradient(90deg, var(--orange), #ff9b63);
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      color: var(--orange);
+      font-size: 13px;
+      font-weight: 950;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .cover {
+      display: grid;
+      grid-template-columns: 1fr 430px;
+      align-items: center;
+      gap: 54px;
+      background:
+        linear-gradient(135deg, rgba(238, 77, 45, .08), transparent 52%),
+        #fff;
+    }
+
+    .cover-title {
+      max-width: 1020px;
+    }
+
+    .cover-title .product {
+      display: inline-block;
+      margin-bottom: 18px;
+      color: var(--orange);
+      font-size: 34px;
+      font-weight: 950;
+    }
+
+    .cover h1 {
+      font-size: 56px;
+      line-height: 1.18;
+    }
+
+    .owner {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 34px;
+      padding: 14px 18px;
+      border: 1px solid #ffd0c1;
+      border-radius: 999px;
+      background: #fff7f2;
+      color: #8c2b19;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .cover-orbit {
+      position: relative;
+      height: 560px;
+      border-radius: 32px;
+      background:
+        radial-gradient(circle at 50% 50%, #fff 0 28%, #fff3ed 29% 54%, transparent 55%),
+        linear-gradient(180deg, #fff, #fff7f2);
+      border: 1px solid #ffd5c8;
+      box-shadow: var(--orange-shadow);
+    }
+
+    .orbit-center {
+      position: absolute;
+      inset: 190px 120px;
+      display: grid;
+      place-items: center;
+      border-radius: 26px;
+      background: var(--orange);
+      color: #fff;
+      text-align: center;
+      font-size: 34px;
+      font-weight: 950;
+      box-shadow: 0 24px 60px rgba(238, 77, 45, .32);
+    }
+
+    .orbit-chip {
+      position: absolute;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 130px;
+      min-height: 48px;
+      padding: 10px 14px;
+      border: 1px solid #ffd3c5;
+      border-radius: 999px;
+      background: #fff;
+      color: #7a271a;
+      font-size: 14px;
+      font-weight: 900;
+      box-shadow: 0 16px 35px rgba(23, 32, 42, .10);
+    }
+
+    .c1 { left: 36px; top: 58px; }
+    .c2 { right: 28px; top: 82px; }
+    .c3 { left: 12px; top: 252px; }
+    .c4 { right: 10px; top: 276px; }
+    .c5 { left: 52px; bottom: 70px; }
+    .c6 { right: 42px; bottom: 60px; }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 28px;
+      margin-bottom: 34px;
+    }
+
+    .section-head p {
+      max-width: 620px;
+      margin-top: 14px;
+    }
+
+    .system-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 22px;
+      margin-top: 30px;
+    }
+
+    .agent-card {
+      position: relative;
+      min-height: 330px;
+      padding: 28px;
+      border: 1px solid #ffd2c5;
+      border-radius: 24px;
+      background: linear-gradient(180deg, #fff7f2, #fff);
+      box-shadow: 0 20px 50px rgba(23, 32, 42, .09);
+    }
+
+    .agent-card::after {
+      content: "→";
+      position: absolute;
+      right: -24px;
+      top: 44%;
+      color: var(--orange);
+      font-size: 42px;
+      font-weight: 950;
+    }
+
+    .agent-card:last-child::after { display: none; }
+
+    .agent-num {
+      display: inline-grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      margin-bottom: 22px;
+      border-radius: 14px;
+      color: #fff;
+      background: var(--orange);
+      font-weight: 950;
+      box-shadow: var(--orange-shadow);
+    }
+
+    .agent-card h3 {
+      font-size: 30px;
+      margin-bottom: 14px;
+    }
+
+    .agent-card p { font-size: 17px; }
+
+    .system-note {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 22px;
+      margin-top: 26px;
+    }
+
+    .note-card {
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: #fff;
+      box-shadow: 0 16px 40px rgba(23, 32, 42, .07);
+    }
+
+    .note-card strong {
+      display: block;
+      color: var(--orange);
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: .95fr 1.05fr;
+      gap: 30px;
+      align-items: stretch;
+    }
+
+    .pain-stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .pain {
+      display: grid;
+      grid-template-columns: 60px 1fr;
+      gap: 18px;
+      padding: 24px;
+      border: 1px solid #ffd8cc;
+      border-radius: 20px;
+      background: #fff9f6;
+    }
+
+    .pain .icon {
+      display: grid;
+      place-items: center;
+      width: 60px;
+      height: 60px;
+      border-radius: 18px;
+      color: #fff;
+      background: var(--orange);
+      font-size: 22px;
+      font-weight: 950;
+    }
+
+    .pain h3 { margin-bottom: 8px; }
+
+    .image-card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: #fff;
+      box-shadow: 0 20px 60px rgba(23, 32, 42, .10);
+    }
+
+    .image-card .caption {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      background: #fff7f2;
+      font-weight: 950;
+    }
+
+    .image-card img {
+      display: block;
+      width: 100%;
+      height: 520px;
+      object-fit: cover;
+      object-position: left top;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: #fff1eb;
+      color: #9a3412;
+      font-size: 12px;
+      font-weight: 950;
+    }
+
+    .actions-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    .action-card {
+      min-height: 360px;
+      padding: 34px;
+      border: 1px solid #ffd4c7;
+      border-radius: 28px;
+      background: #fff;
+      box-shadow: 0 22px 58px rgba(23, 32, 42, .10);
+    }
+
+    .action-card .big {
+      display: block;
+      color: var(--orange);
+      font-size: 54px;
+      font-weight: 950;
+      line-height: 1;
+      margin-bottom: 26px;
+    }
+
+    .action-card h3 {
+      font-size: 31px;
+      margin-bottom: 18px;
+    }
+
+    .action-card p {
+      font-size: 20px;
+    }
+
+    .feature-layout {
+      display: grid;
+      grid-template-columns: 390px 1fr;
+      gap: 28px;
+      min-height: 640px;
+    }
+
+    .feature-tabs {
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+
+    .tab-button, .sys-button {
+      display: grid;
+      grid-template-columns: 38px 1fr;
+      gap: 12px;
+      align-items: center;
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #f0d6ce;
+      border-radius: 16px;
+      color: var(--ink);
+      background: #fff;
+      text-align: left;
+      cursor: pointer;
+      transition: .18s ease;
+    }
+
+    .tab-button b, .sys-button b {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      color: #fff;
+      background: #ff9a62;
+    }
+
+    .tab-button span, .sys-button span {
+      display: block;
+      font-size: 15px;
+      font-weight: 950;
+    }
+
+    .tab-button small, .sys-button small {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .tab-button.active, .tab-button:hover, .sys-button.active, .sys-button:hover {
+      transform: translateX(3px);
+      border-color: var(--orange);
+      background: #fff7f2;
+      box-shadow: 0 14px 32px rgba(238, 77, 45, .14);
+    }
+
+    .feature-panel {
+      display: none;
+      overflow: hidden;
+      border: 1px solid #f1d4ca;
+      border-radius: 24px;
+      background: #fff;
+      box-shadow: 0 22px 55px rgba(23, 32, 42, .09);
+    }
+
+    .feature-panel.active {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+    }
+
+    .feature-copy {
+      padding: 32px;
+      background: linear-gradient(180deg, #fff7f2, #fff);
+    }
+
+    .feature-copy h3 {
+      font-size: 30px;
+      margin-bottom: 16px;
+    }
+
+    .bullet-list {
+      display: grid;
+      gap: 12px;
+      margin: 22px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .bullet-list li {
+      display: grid;
+      grid-template-columns: 22px 1fr;
+      gap: 10px;
+      color: #344054;
+      font-size: 15px;
+    }
+
+    .bullet-list li::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      margin-top: 6px;
+      border-radius: 999px;
+      background: var(--orange);
+      box-shadow: 0 0 0 5px rgba(238, 77, 45, .12);
+    }
+
+    .feature-proof {
+      padding: 20px;
+      background: #f9fafb;
+    }
+
+    .scroll-shot {
+      height: 590px;
+      overflow: auto;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+      scroll-behavior: smooth;
+    }
+
+    .scroll-shot img {
+      display: block;
+      width: 100%;
+      height: auto;
+      margin-bottom: 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    .feature-proof > img {
+      display: block;
+      width: 100%;
+      height: 590px;
+      object-fit: contain;
+      object-position: top center;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+    }
+
+    .pdf-frame {
+      display: block;
+      width: 100%;
+      height: 590px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+    }
+
+    .proof-tools {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .impact-layout {
+      display: grid;
+      grid-template-columns: .86fr 1.14fr;
+      gap: 32px;
+      align-items: stretch;
+      margin-top: 34px;
+    }
+
+    .orange-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 560px;
+      padding: 38px;
+      border-radius: 30px;
+      color: #fff;
+      background: var(--orange);
+      box-shadow: var(--orange-shadow);
+    }
+
+    .orange-panel h3 {
+      font-size: 42px;
+      line-height: 1.16;
+    }
+
+    .orange-panel p {
+      color: rgba(255,255,255,.86);
+      font-size: 22px;
+    }
+
+    .stakeholder-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .stakeholder {
+      min-height: 260px;
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: #fff;
+      box-shadow: 0 18px 44px rgba(23, 32, 42, .08);
+    }
+
+    .stakeholder strong {
+      display: inline-flex;
+      margin-bottom: 18px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      color: #9a3412;
+      background: #fff1eb;
+      font-size: 13px;
+    }
+
+    .stakeholder h3 {
+      margin-bottom: 12px;
+      font-size: 29px;
+    }
+
+    .thanks {
+      display: grid;
+      place-items: center;
+      text-align: center;
+      background:
+        radial-gradient(circle at 50% 20%, rgba(238, 77, 45, .16), transparent 30rem),
+        #fff;
+    }
+
+    .thanks h2 {
+      color: var(--orange);
+      font-size: 82px;
+      letter-spacing: .02em;
+    }
+
+    .thanks p {
+      margin-top: 20px;
+      color: var(--ink);
+      font-size: 30px;
+      font-weight: 900;
+    }
+
+    .floating-tools {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 40;
+      display: flex;
+      gap: 8px;
+      padding: 10px;
+      border: 1px solid #ffd2c5;
+      border-radius: 999px;
+      background: rgba(255,255,255,.94);
+      box-shadow: 0 18px 50px rgba(23, 32, 42, .14);
+    }
+
+    .print-btn {
+      color: #fff;
+      background: var(--orange);
+      border-color: var(--orange);
+    }
+
+    @media (max-width: 1100px) {
+      main { padding: 16px; }
+      .page { min-height: auto; padding: 36px 24px; border-radius: 18px; }
+      h1, .cover h1 { font-size: 38px; }
+      h2 { font-size: 34px; }
+      .cover, .system-grid, .system-note, .problem-grid, .actions-grid, .feature-layout, .feature-panel.active, .impact-layout, .stakeholder-grid { grid-template-columns: 1fr; }
+      .agent-card::after { display: none; }
+      .nav { display: none; }
+      .cover-orbit { height: 420px; }
+      .orbit-center { inset: 150px 110px; }
+      .scroll-shot, .feature-proof > img, .pdf-frame { height: 420px; }
+    }
+
+    @media print {
+      @page { size: A4 landscape; margin: 8mm; }
+      html, body { background: #fff; }
+      .topbar, .floating-tools { display: none; }
+      main { max-width: none; padding: 0; }
+      .page {
+        width: 100%;
+        min-height: 190mm;
+        margin: 0;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        page-break-after: always;
+        break-after: page;
+      }
+      .page:last-child { page-break-after: auto; break-after: auto; }
+      .scroll-shot { overflow: hidden; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand">
+      <span class="brand-mark" contenteditable="false">F</span>
+      <span contenteditable="true">FBS Sweet Helper</span>
+    </div>
+    <nav class="nav" aria-label="页面导航">
+      <a href="#cover">封面</a>
+      <a href="#system">System Design</a>
+      <a href="#why">Why</a>
+      <a href="#action">Action</a>
+      <a href="#features">7 Functions</a>
+      <a href="#impact">Impact</a>
+      <a href="#thanks">Q&A</a>
+    </nav>
+  </div>
+
+  <main>
+    <section class="page cover" id="cover">
+      <div class="cover-title">
+        <span class="product" contenteditable="true">FBS Sweet Helper</span>
+        <h1 contenteditable="true">承接卖家表现复盘、库存风险诊断、项目达标追踪、入仓选品 Pitch、官方仓基础操作指南和卖家官方仓报告一键生成</h1>
+        <div class="owner" contenteditable="true">Bot owner：yijin.wang</div>
+      </div>
+
+      <div class="cover-orbit" aria-label="核心功能图">
+        <div class="orbit-center" contenteditable="true">FBS<br>Helper</div>
+        <span class="orbit-chip c1" contenteditable="true">表现复盘</span>
+        <span class="orbit-chip c2" contenteditable="true">库存风险</span>
+        <span class="orbit-chip c3" contenteditable="true">项目达标</span>
+        <span class="orbit-chip c4" contenteditable="true">入仓选品</span>
+        <span class="orbit-chip c5" contenteditable="true">操作指南</span>
+        <span class="orbit-chip c6" contenteditable="true">报告生成</span>
+      </div>
+    </section>
+
+    <section class="page" id="system">
+      <div class="section-head">
+        <div>
+          <span class="kicker" contenteditable="true">System Design</span>
+          <h2 contenteditable="true">用 3 个 Agent 拆分任务流，方便后续持续接入更多官方仓能力</h2>
+          <p contenteditable="true">整体架构不是把所有功能写在一个大 Prompt 里，而是用主控分发 + 业务查询 + 报告交付的方式承接迭代，后续新增项目、站点、报表或知识库时，只需要扩展对应 Agent。</p>
+        </div>
+      </div>
+
+      <div class="system-grid">
+        <div class="agent-card">
+          <span class="agent-num" contenteditable="true">01</span>
+          <h3 contenteditable="true">Router Agent</h3>
+          <p contenteditable="true">识别用户意图、判断缺失参数、做 GGP / RM / 站点 / 项目类型路由，把问题分发到正确任务流。</p>
+        </div>
+        <div class="agent-card">
+          <span class="agent-num" contenteditable="true">02</span>
+          <h3 contenteditable="true">FBS Operation Helper</h3>
+          <p contenteditable="true">完成主要官方仓查询：卖家表现、库存风险、项目达标、RM 看板、入仓 Pitch、基础操作指南。</p>
+        </div>
+        <div class="agent-card">
+          <span class="agent-num" contenteditable="true">03</span>
+          <h3 contenteditable="true">Report Agent</h3>
+          <p contenteditable="true">整合卖家表现、库存、项目、激励和入仓机会，生成完整 PDF / HTML 拜访材料。</p>
+        </div>
+      </div>
+
+      <div class="system-note">
+        <div class="note-card">
+          <strong contenteditable="true">为什么要做 Multi-Agent？</strong>
+          <p contenteditable="true">因为官方仓问题会不断扩展，Multi-Agent 后续迭代更稳，也方便链接 workflow 依靠 data API 取数。</p>
+        </div>
+        <div class="note-card">
+          <strong contenteditable="true">交互设计</strong>
+          <p contenteditable="true">用户只需要自然语言提问，系统自动判断是走单点查询、RM 管理看板，还是完整报告生成。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="why">
+      <div class="section-head">
+        <div>
+          <span class="kicker" contenteditable="true">Current Pain Points</span>
+          <h2 contenteditable="true">目前工作流需要跨越多张表格，无法一键看到卖家全局表现，各板块信息高度分散</h2>
+        </div>
+      </div>
+
+      <div class="problem-grid">
+        <div class="pain-stack">
+          <div class="pain">
+            <div class="icon" contenteditable="false">01</div>
+            <div>
+              <h3 contenteditable="true">卖家复盘需要来回切 16-20 张表</h3>
+              <p contenteditable="true">整体 ADO、店铺表现、库存、OOS、TAGGING、SKU Pitch 分散在不同数据源里，RM 要先查表，再手动判断原因。</p>
+            </div>
+          </div>
+          <div class="pain">
+            <div class="icon" contenteditable="false">02</div>
+            <div>
+              <h3 contenteditable="true">项目达标分散在多个站点与项目 tracker</h3>
+              <p contenteditable="true">Free Trial、Increase、VIP、广告金返还等项目各自维护，单个项目可能就有五六张表。</p>
+            </div>
+          </div>
+          <div class="pain">
+            <div class="icon" contenteditable="false">03</div>
+            <div>
+              <h3 contenteditable="true">难以用全局视角定位卖家表现变化的真正原因</h3>
+              <p contenteditable="true">卖家整体单量下滑，可能来自某个热销品缺货；站点整体提升，也可能来自某几个产品爆发。人工查表很难快速串联“卖家-站点-店铺-商品”。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="image-card">
+          <div class="caption">
+            <span contenteditable="true">原始数据源：表现、库存、项目、激励、图片与操作知识分散在多个表</span>
+            <span class="tag" contenteditable="true">Before</span>
+          </div>
+          <img src="fbs_bot_assets/data_sources.png" alt="数据源表截图">
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="action">
+      <div class="section-head">
+        <div>
+          <span class="kicker" contenteditable="true">From Data To Action</span>
+          <h2 contenteditable="true">从数据整合到行动建议，Bot 一键转成增长、风险、达标缺口和补货动作</h2>
+          <p contenteditable="true">核心不是把表格复制出来，而是把分散数据翻译成“现在应该跟进什么”。</p>
+        </div>
+      </div>
+
+      <div class="actions-grid">
+        <div class="action-card">
+          <span class="big" contenteditable="true">1-2h</span>
+          <h3 contenteditable="true">减少查表成本</h3>
+          <p contenteditable="true">预计每周为 RM 节省 1-2 小时，不必在多个表格和项目 tracker 之间来回定位数据。</p>
+        </div>
+        <div class="action-card">
+          <span class="big" contenteditable="true">P0/P1</span>
+          <h3 contenteditable="true">直接输出优先级</h3>
+          <p contenteditable="true">把缺货、ADO 下滑、TAG 风险、项目差距转成 P0/P1/P2 行动清单。</p>
+        </div>
+        <div class="action-card">
+          <span class="big" contenteditable="true">PDF</span>
+          <h3 contenteditable="true">沉淀可交付材料</h3>
+          <p contenteditable="true">支持生成卖家拜访报告、RM 项目看板和官方仓操作指南，统一团队对外口径。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="features">
+      <div class="section-head">
+        <div>
+          <span class="kicker" contenteditable="true">Function Preview</span>
+          <h2 contenteditable="true">主要涵盖官方仓全部功能，7 大功能预览</h2>
+        </div>
+      </div>
+
+      <div class="feature-layout">
+        <div class="feature-tabs" role="tablist">
+          <button class="tab-button active" data-tab="tab-1"><b>1</b><span contenteditable="true">卖家整体 FBS 表现<small contenteditable="true">整体复盘 / 站点 / 店铺</small></span></button>
+          <button class="tab-button" data-tab="tab-2"><b>2</b><span contenteditable="true">库存与商品风险<small contenteditable="true">缺货 / 黑库 / TAGGING</small></span></button>
+          <button class="tab-button" data-tab="tab-3"><b>3</b><span contenteditable="true">项目达标与激励<small contenteditable="true">Free Trial / VIP / Ads</small></span></button>
+          <button class="tab-button" data-tab="tab-4"><b>4</b><span contenteditable="true">RM 项目看板<small contenteditable="true">名下卖家进度</small></span></button>
+          <button class="tab-button" data-tab="tab-5"><b>5</b><span contenteditable="true">新仓 Pitch 与选品<small contenteditable="true">推荐入仓商品</small></span></button>
+          <button class="tab-button" data-tab="tab-6"><b>6</b><span contenteditable="true">报告自动生成<small contenteditable="true">PDF / HTML 汇报材料</small></span></button>
+          <button class="tab-button" data-tab="tab-7"><b>7</b><span contenteditable="true">官方仓操作问答<small contenteditable="true">入仓流程指南</small></span></button>
+        </div>
+
+        <div>
+          <article class="feature-panel active" id="tab-1">
+            <div class="feature-copy">
+              <h3 contenteditable="true">卖家整体 FBS 表现复盘</h3>
+              <p contenteditable="true">从 GGP、站点、店铺和行动建议四个层级看整体表现，帮助 RM 快速判断 FBS ADO 下滑或增长的原因。</p>
+              <ul class="bullet-list">
+                <li contenteditable="true">按 TTL / PH / MY / SG / TH 看表现</li>
+                <li contenteditable="true">定位缺货、TAGGING、站点空白等风险</li>
+                <li contenteditable="true">滚动查看完整复盘输出</li>
+              </ul>
+            </div>
+            <div class="feature-proof">
+              <div class="proof-tools">
+                <button class="mini-btn scroll-top" data-target="review-scroll">回到顶部</button>
+                <button class="mini-btn scroll-down" data-target="review-scroll">向下浏览</button>
+              </div>
+              <div class="scroll-shot" id="review-scroll">
+                <img src="fbs_bot_assets/review_1.png" alt="整体复盘1">
+                <img src="fbs_bot_assets/review_2.png" alt="整体复盘2">
+                <img src="fbs_bot_assets/review_3.png" alt="整体复盘3">
+                <img src="fbs_bot_assets/review_5.png" alt="整体复盘5">
+              </div>
+            </div>
+          </article>
+
+          <article class="feature-panel" id="tab-2">
+            <div class="feature-copy">
+              <h3 contenteditable="true">产品层库存风险诊断</h3>
+              <p contenteditable="true">Bot 会把缺货产品、头部热销品、黑库风险和 FBS TAGGING 风险转成补货行动清单。</p>
+              <ul class="bullet-list">
+                <li contenteditable="true">识别 DOC 不足 30 天产品</li>
+                <li contenteditable="true">标记热销品中最急需补货 SKU</li>
+                <li contenteditable="true">输出补货、IR、库存监控建议</li>
+              </ul>
+            </div>
+            <div class="feature-proof"><img src="fbs_bot_assets/inventory_monitor.png" alt="库存监控截图"></div>
+          </article>
+
+          <article class="feature-panel" id="tab-3">
+            <div class="feature-copy">
+              <h3 contenteditable="true">卖家项目达标与激励汇总</h3>
+              <p contenteditable="true">项目视角覆盖已入仓和未入仓卖家机会，不只看 FBS 表现，也看 Free Trial、VIP、Increase、广告金等任务进度。</p>
+              <ul class="bullet-list">
+                <li contenteditable="true">查看项目入选和达标率</li>
+                <li contenteditable="true">识别挑战目标差距</li>
+                <li contenteditable="true">同步广告金与优惠券激励</li>
+              </ul>
+            </div>
+            <div class="feature-proof">
+              <img src="fbs_bot_assets/project_status.png" alt="项目达标与激励截图">
+            </div>
+          </article>
+
+          <article class="feature-panel" id="tab-4">
+            <div class="feature-copy">
+              <h3 contenteditable="true">RM 名下卖家项目看板</h3>
+              <p contenteditable="true">RM 输入邮箱即可查看名下哪些 GGP 参与项目、哪些未达标、哪些需要优先跟进。</p>
+              <ul class="bullet-list">
+                <li contenteditable="true">按 RM 名下 GGP 自动过滤</li>
+                <li contenteditable="true">未达标和高风险卖家优先展示</li>
+                <li contenteditable="true">输出可执行行动建议</li>
+              </ul>
+            </div>
+            <div class="feature-proof"><img src="fbs_bot_assets/rm_project_2.png" alt="RM项目看板"></div>
+          </article>
+
+          <article class="feature-panel" id="tab-5">
+            <div class="feature-copy">
+              <h3 contenteditable="true">新仓 Pitch 与推荐入仓商品</h3>
+              <p contenteditable="true">先展示可直接发给卖家的入仓推荐摘要，再展示带商品图片的爆品入仓明细。</p>
+              <ul class="bullet-list">
+                <li contenteditable="true">区分已加入 FBS 与未加入 FBS 店铺</li>
+                <li contenteditable="true">输出推荐入仓 item 数</li>
+                <li contenteditable="true">结合商品图提升卖家沟通效率</li>
+              </ul>
+            </div>
+            <div class="feature-proof">
+              <div class="proof-tools">
+                <button class="mini-btn scroll-top" data-target="pitch-scroll">回到顶部</button>
+                <button class="mini-btn scroll-down" data-target="pitch-scroll">向下浏览</button>
+              </div>
+              <div class="scroll-shot" id="pitch-scroll">
+                <img src="fbs_bot_assets/inbound_list.png" alt="入仓list">
+                <img src="fbs_bot_assets/sku_pitch_detail.png" alt="爆品入仓表格具体">
+              </div>
+            </div>
+          </article>
+
+          <article class="feature-panel" id="tab-6">
+            <div class="feature-copy">
+              <h3 contenteditable="true">卖家官方仓报告一键生成</h3>
+              <p contenteditable="true">将卖家整体表现、库存风险、项目达标、激励和推荐入仓产品整理成可用于拜访的 PDF / HTML 材料。</p>
+              <ul class="bullet-list">
+                <li contenteditable="true">默认老板汇报版结构</li>
+                <li contenteditable="true">保留重点结论和 Next Actions</li>
+                <li contenteditable="true">适合拜访卖家前快速生成</li>
+              </ul>
+            </div>
+            <div class="feature-proof">
+              <div class="proof-tools">
+                <button class="mini-btn scroll-top" data-target="pdf-scroll">回到顶部</button>
+                <button class="mini-btn scroll-down" data-target="pdf-scroll">向下浏览</button>
+              </div>
+              <div class="scroll-shot" id="pdf-scroll">
+                <img src="fbs_bot_assets/pdf_1.png" alt="PDF报告截图1">
+                <img src="fbs_bot_assets/pdf_2.png" alt="PDF报告截图2">
+                <img src="fbs_bot_assets/pdf_3.png" alt="PDF报告截图3">
+                <img src="fbs_bot_assets/pdf_4.png" alt="PDF报告截图4">
+                <img src="fbs_bot_assets/pdf_5.png" alt="PDF报告截图5">
+                <img src="fbs_bot_assets/pdf_6.png" alt="PDF报告截图6">
+                <img src="fbs_bot_assets/pdf_7.png" alt="PDF报告截图7">
+                <img src="fbs_bot_assets/pdf_8.png" alt="PDF报告截图8">
+              </div>
+            </div>
+          </article>
+
+          <article class="feature-panel" id="tab-7">
+            <div class="feature-copy">
+              <h3 contenteditable="true">官方仓基础操作指南</h3>
+              <p contenteditable="true">围绕入仓流程、提品审核、IR、ISR、送仓交接等节点，帮助 RM 和卖家快速了解官方仓操作规则。</p>
+              <ul class="bullet-list">
+                <li contenteditable="true">把官方手册转成可问答流程</li>
+                <li contenteditable="true">风险点与正确做法并列展示</li>
+                <li contenteditable="true">减少重复沟通成本</li>
+              </ul>
+            </div>
+            <div class="feature-proof">
+              <div class="proof-tools">
+                <button class="mini-btn scroll-top" data-target="guide-scroll">回到顶部</button>
+                <button class="mini-btn scroll-down" data-target="guide-scroll">向下浏览</button>
+              </div>
+              <div class="scroll-shot" id="guide-scroll">
+                <img src="fbs_bot_assets/guide_1.png" alt="官方仓指南1">
+                <img src="fbs_bot_assets/guide_2.png" alt="官方仓指南2">
+                <img src="fbs_bot_assets/guide_3.png" alt="官方仓指南3">
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="impact">
+      <div class="section-head">
+        <div>
+          <span class="kicker" contenteditable="true">Business Impact</span>
+          <h2 contenteditable="true">让 RM 更快发现问题、推动卖家行动，提升 FBS 各项任务推进效率</h2>
+          <p contenteditable="true">不必花时间在多个表格之间来回看数据，Bot 直接告诉你该看什么、该跟进谁、该推动什么动作。</p>
+        </div>
+      </div>
+
+      <div class="impact-layout">
+        <div class="orange-panel">
+          <h3 contenteditable="true">从“我去查一下”变成“我现在告诉你该做什么”</h3>
+          <p contenteditable="true">FBS Sweet Helper 的价值不是替代表格，而是把分散数据背后的业务判断、优先级和行动建议前置给团队。</p>
+        </div>
+        <div class="stakeholder-grid">
+          <div class="stakeholder">
+            <strong contenteditable="true">For Team</strong>
+            <h3 contenteditable="true">沉淀可复用经验</h3>
+            <p contenteditable="true">把分散经验沉淀成可复用的 Bot 流程、报告模板和知识库问答。</p>
+          </div>
+          <div class="stakeholder">
+            <strong contenteditable="true">For Manager</strong>
+            <h3 contenteditable="true">统一经营口径</h3>
+            <p contenteditable="true">能用统一口径查看 FBS 表现、项目达标和下月行动计划。</p>
+          </div>
+          <div class="stakeholder">
+            <strong contenteditable="true">For RM</strong>
+            <h3 contenteditable="true">快速识别风险</h3>
+            <p contenteditable="true">减少查表时间，快速识别名下卖家项目与库存风险。</p>
+          </div>
+          <div class="stakeholder">
+            <strong contenteditable="true">For Seller</strong>
+            <h3 contenteditable="true">获得清晰动作</h3>
+            <p contenteditable="true">拿到更清晰的补货、入仓、扩品和项目冲刺建议。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page thanks" id="thanks">
+      <div>
+        <span class="kicker" contenteditable="true">FBS Sweet Helper</span>
+        <h2 contenteditable="true">THANKS LISTENING</h2>
+        <p contenteditable="true">Q&A</p>
+      </div>
+    </section>
+  </main>
+
+  <div class="floating-tools">
+    <a class="mini-btn" href="#cover">回到封面</a>
+    <button class="print-btn" type="button" onclick="window.print()">打印 / 导出 PDF</button>
+  </div>
+
+  <script>
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const panels = document.querySelectorAll('.feature-panel');
+
+    tabButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const id = button.dataset.tab;
+        tabButtons.forEach((b) => b.classList.toggle('active', b === button));
+        panels.forEach((panel) => panel.classList.toggle('active', panel.id === id));
+      });
+    });
+
+    document.querySelectorAll('.scroll-top').forEach((button) => {
+      button.addEventListener('click', () => {
+        const el = document.getElementById(button.dataset.target);
+        if (el) el.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+
+    document.querySelectorAll('.scroll-down').forEach((button) => {
+      button.addEventListener('click', () => {
+        const el = document.getElementById(button.dataset.target);
+        if (el) el.scrollBy({ top: Math.max(360, el.clientHeight * .82), behavior: 'smooth' });
+      });
+    });
+  </script>
+</body>
+</html>
