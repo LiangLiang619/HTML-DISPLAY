@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8" />
@@ -734,7 +734,7 @@
       <a href="#system">System Design</a>
       <a href="#why">Why</a>
       <a href="#action">Action</a>
-      <a href="#features">7 Functions</a>
+      <a href="#features">8 Functions</a>
       <a href="#impact">Impact</a>
       <a href="#thanks">Q&A</a>
     </nav>
@@ -875,7 +875,7 @@
       <div class="section-head">
         <div>
           <span class="kicker" contenteditable="true">Function Preview</span>
-          <h2 contenteditable="true">主要涵盖官方仓全部功能，7 大功能预览</h2>
+          <h2 contenteditable="true">主要涵盖官方仓全链路能力，8 大功能预览</h2>
         </div>
       </div>
 
@@ -888,6 +888,7 @@
           <button class="tab-button" data-tab="tab-5"><b>5</b><span contenteditable="true">新仓 Pitch 与选品<small contenteditable="true">推荐入仓商品</small></span></button>
           <button class="tab-button" data-tab="tab-6"><b>6</b><span contenteditable="true">报告自动生成<small contenteditable="true">PDF / HTML 汇报材料</small></span></button>
           <button class="tab-button" data-tab="tab-7"><b>7</b><span contenteditable="true">官方仓操作问答<small contenteditable="true">入仓流程指南</small></span></button>
+          <button class="tab-button" data-tab="tab-8"><b>8</b><span contenteditable="true">PO/IR 查询<small contenteditable="true">跨站点审批结果查询</small></span></button>
         </div>
 
         <div>
@@ -1025,6 +1026,28 @@
                 <img src="fbs_bot_assets/guide_1.png" alt="官方仓指南1">
                 <img src="fbs_bot_assets/guide_2.png" alt="官方仓指南2">
                 <img src="fbs_bot_assets/guide_3.png" alt="官方仓指南3">
+              </div>
+            </div>
+          </article>
+          <article class="feature-panel" id="tab-8">
+            <div class="feature-copy">
+              <h3 contenteditable="true">PO/IR 审批结果一键查询</h3>
+              <p contenteditable="true">支持 AI 按站点、日期范围、RM 邮箱、Shop ID 和 MT SKU 一键查询各站点 PO / PN / IR 额外白名单审批及入仓结果，并把跨表结果汇总成可直接发给 RM 的查询结论。</p>
+              <ul class="bullet-list">
+                <li contenteditable="true">过去 RM 需要分别打开 TH / MY / SG / PH 多个表格逐个检查，查一次结果耗时且容易漏看。</li>
+                <li contenteditable="true">现在只要输入查询条件，Bot 会写入查询面板并触发 Google Sheet Script 自动跨表检索。</li>
+                <li contenteditable="true">查询和汇总在 Google Sheet 侧完成，不占用大模型上下文和 token，更适合高频运营查询。</li>
+              </ul>
+            </div>
+            <div class="feature-proof">
+              <div class="proof-tools">
+                <button class="mini-btn scroll-top" data-target="po-scroll">回到顶部</button>
+                <button class="mini-btn scroll-down" data-target="po-scroll">向下浏览</button>
+              </div>
+              <div class="scroll-shot" id="po-scroll">
+                <img src="fbs_bot_assets/po查询1.png" alt="PO IR 查询条件与脚本配置">
+                <img src="fbs_bot_assets/po 查询2.png" alt="PO IR 查询结果汇总">
+                <img src="fbs_bot_assets/po查询 3.png" alt="PO IR 查询表格结果">
               </div>
             </div>
           </article>
